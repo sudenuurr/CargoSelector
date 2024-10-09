@@ -9,5 +9,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface IOrderDal:IGenericDal<Order>
     {
+        //OrderDesi değerine göre kargo fiyatı hesaplama metodu
+        Task<Order> CreateOrderAsync(Order order);
     }
 }

@@ -32,72 +32,27 @@ namespace WebAPI.Controllers
             var orders = await _orderService.TGetAllAsync();
             return Ok(orders);
         }
-
-        // Yeni Sipariş Oluşturma
-
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
+        //Sipariş Ekleme
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(CreateOrderDto createOrderDto)
         {
-            // Model doğrulama kontrolü
             if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Hatalı model durumu
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState); // Hatalı model durumu
 
-            int orderDesi = createOrderDto.OrderDesi; // Sipariş desisi
-
-            // Tüm kargo firmalarını al
-            var carriers = await _carrierConfigurationService.TGetAllAsync();
-            decimal carrierCost = 0; // Kargo ücreti
-
-            // Kargo firmalarının MinDesi-MaxDesi aralıklarını kontrol et
-            foreach (var carrier in carriers)
+            // CreateOrderDto'dan Order nesnesi oluştur
+            var order = new Order
             {
-                // Eğer sipariş desisi kargo firmasının aralığına uyuyorsa
-                if (orderDesi >= carrier.CarrierConfiguration.CarrierMinDesi && orderDesi <= carrier.CarrierConfiguration.CarrierMaxDesi)
-                {
-                    // Eğer ilk kargo firması, kargo ücretini ayarla
-                    if (carrierCost == 0 || carrier.CarrierConfiguration.CarrierCost < carrierCost)
-                    {
-                        carrierCost = carrier.CarrierConfiguration.CarrierCost; // En düşük kargo ücreti
-                    }
-                }
-            }
-
-            // Eğer uygun bir kargo firması bulunamadıysa
-            if (carrierCost == 0)
-            {
-                // En yakın kargo firmasını bul
-                CarrierConfiguration closestCarrier = null;
-                int closestDifference = int.MaxValue;
-
-                foreach (var carrier in carriers)
-                {
-                    // MinDesi ile sipariş desisi arasındaki farkı hesapla
-                    int difference = Math.Abs(carrier.CarrierConfiguration.CarrierMinDesi - orderDesi);
-
-                    // Eğer bu fark daha küçükse, en yakın kargo firmasını güncelle
-                    if (difference < closestDifference)
-                    {
-                        closestDifference = difference;
-                        closestCarrier = carrier;
-                    }
-                }
-
-                // Kargo ücreti hesaplama
-                if (closestCarrier != null)
-                {
-                    int extraDesi = orderDesi - closestCarrier.CarrierConfiguration.CarrierMinDesi;
-                    carrierCost = closestCarrier.CarrierConfiguration.CarrierCost + (extraDesi * closestCarrier.CarrierPlusDesiCost);
-                }
-            }
+                OrderDesi = createOrderDto.OrderDesi,
+                OrderDate=DateTime.Now
+            };
 
             // Siparişi oluştur
-            var order = _mapper.Map<Order>(createOrderDto);
-            order.OrderCarrierCost = carrierCost; // Kargo ücreti olarak hesaplanan değeri ata
+            var createdOrder = await _orderService.TCreateOrderAsync(order); // Asenkron sipariş oluşturma
 
-            await _orderService.TInsertAsync(order); // Asenkron olarak siparişi ekle
-
-            return Ok("Sipariş başarıyla oluşturuldu.");
+            return Ok(new { Message = "Siparişiniz başarıyla eklendi.", Order = createdOrder }); // Oluşturulan siparişi döndür
         }
-   
+
 
         // Sipariş Silme
         [HttpDelete("{id}")]

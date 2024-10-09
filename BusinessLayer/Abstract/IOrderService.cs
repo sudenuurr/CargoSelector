@@ -9,5 +9,7 @@ namespace BusinessLayer.Abstract
 {
     public interface IOrderService:IGenericService<Order>
     {
+        Task<Order> TCreateOrderAsync(Order order);
+
     }
 }
