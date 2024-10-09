@@ -10,6 +10,7 @@ namespace EntityLayer.Concrete
 {
     public class Carrier
     {
+        [Key]
         public int CarrierId { get; set; }
         [Required]
         [MaxLength(50)]
@@ -18,11 +19,12 @@ namespace EntityLayer.Concrete
 
         [Range(0, int.MaxValue)]
         public int CarrierPlusDesiCost { get; set; }
-        [JsonIgnore]
         public int CarrierConfigurationId { get; set; }
         [JsonIgnore]
         public CarrierConfiguration CarrierConfiguration { get; set; }
         [JsonIgnore]
         public ICollection<Order> Orders { get; set; }
+        [JsonIgnore]
+        public ICollection<CarrierReport> CarrierReports { get; set; }
     }
 }

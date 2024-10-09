@@ -13,6 +13,7 @@ namespace DataAccessLayer.Concrete
         public DbSet<Carrier> Carriers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<CarrierConfiguration> CarrierConfigurations { get; set; }
+        public DbSet<CarrierReport> CarrierReports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,6 +33,12 @@ namespace DataAccessLayer.Concrete
                 .HasOne(o => o.Carrier)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CarrierId);
+
+            // Carrier Report Configuration
+            modelBuilder.Entity<CarrierReport>()
+            .HasOne(cr => cr.Carrier)
+            .WithMany(c => c.CarrierReports)
+            .HasForeignKey(cr => cr.CarrierId);
         }
     }
 }

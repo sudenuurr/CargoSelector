@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace EntityLayer.Concrete
 {
     public class CarrierConfiguration
     {
+        [Key]
         public int CarrierConfigurationId { get; set; }
 
         [Range(1, int.MaxValue)]

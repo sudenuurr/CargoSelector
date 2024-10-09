@@ -31,7 +31,7 @@ namespace DataAccessLayer.Migrations
                 {
                     CarrierId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CarrierName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CarrierName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CarrierIsActive = table.Column<bool>(type: "bit", nullable: false),
                     CarrierPlusDesiCost = table.Column<int>(type: "int", nullable: false),
                     CarrierConfigurationId = table.Column<int>(type: "int", nullable: false)
@@ -44,6 +44,28 @@ namespace DataAccessLayer.Migrations
                         column: x => x.CarrierConfigurationId,
                         principalTable: "CarrierConfigurations",
                         principalColumn: "CarrierConfigurationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarrierReports",
+                columns: table => new
+                {
+                    ReportId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarrierId = table.Column<int>(type: "int", nullable: false),
+                    ReportName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ReportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReportDetails = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarrierReports", x => x.ReportId);
+                    table.ForeignKey(
+                        name: "FK_CarrierReports_Carriers_CarrierId",
+                        column: x => x.CarrierId,
+                        principalTable: "Carriers",
+                        principalColumn: "CarrierId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -70,6 +92,11 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CarrierReports_CarrierId",
+                table: "CarrierReports",
+                column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CarrierConfigurationId",
                 table: "Carriers",
                 column: "CarrierConfigurationId",
@@ -83,6 +110,9 @@ namespace DataAccessLayer.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CarrierReports");
+
             migrationBuilder.DropTable(
                 name: "Orders");
 

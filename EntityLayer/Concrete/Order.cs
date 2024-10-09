@@ -10,6 +10,7 @@ namespace EntityLayer.Concrete
 {
     public class Order
     {
+        [Key]
         public int OrderId { get; set; }
 
         [Range(1, int.MaxValue)]

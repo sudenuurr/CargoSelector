@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241008173629_mig1")]
+    [Migration("20241009163938_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,8 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("CarrierName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("CarrierPlusDesiCost")
                         .HasColumnType("int");
@@ -76,6 +77,37 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("CarrierConfigurationId");
 
                     b.ToTable("CarrierConfigurations");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.CarrierReport", b =>
+                {
+                    b.Property<int>("ReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReportId"), 1L, 1);
+
+                    b.Property<int>("CarrierId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReportDetails")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ReportName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ReportId");
+
+                    b.HasIndex("CarrierId");
+
+                    b.ToTable("CarrierReports");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Order", b =>
@@ -116,6 +148,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("CarrierConfiguration");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.CarrierReport", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Carrier", "Carrier")
+                        .WithMany("CarrierReports")
+                        .HasForeignKey("CarrierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrier");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Order", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.Carrier", "Carrier")
@@ -129,6 +172,8 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.Carrier", b =>
                 {
+                    b.Navigation("CarrierReports");
+
                     b.Navigation("Orders");
                 });
 
