@@ -51,16 +51,15 @@ namespace DataAccessLayer.Migrations
                 name: "CarrierReports",
                 columns: table => new
                 {
-                    ReportId = table.Column<int>(type: "int", nullable: false)
+                    CarrierReportId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarrierId = table.Column<int>(type: "int", nullable: false),
-                    ReportName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ReportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReportDetails = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    CarrierCost = table.Column<int>(type: "int", nullable: false),
+                    CarrierReportDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarrierReports", x => x.ReportId);
+                    table.PrimaryKey("PK_CarrierReports", x => x.CarrierReportId);
                     table.ForeignKey(
                         name: "FK_CarrierReports_Carriers_CarrierId",
                         column: x => x.CarrierId,

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstract
 {
-    internal interface ICarrierReportDal: IGenericDal<CarrierReport>
+    public interface ICarrierReportDal: IGenericDal<CarrierReport>
     {
+        //Tetiklemede rapor ekleme için gerekli olan metot
+        Task AddRangeAsync(List<CarrierReport> reports);
     }
 }

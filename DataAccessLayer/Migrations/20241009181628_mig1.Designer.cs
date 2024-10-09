@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241009163938_mig1")]
+    [Migration("20241009181628_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,29 +81,22 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.CarrierReport", b =>
                 {
-                    b.Property<int>("ReportId")
+                    b.Property<int>("CarrierReportId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReportId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarrierReportId"), 1L, 1);
+
+                    b.Property<int>("CarrierCost")
+                        .HasColumnType("int");
 
                     b.Property<int>("CarrierId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReportDate")
+                    b.Property<DateTime>("CarrierReportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReportDetails")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ReportName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("ReportId");
+                    b.HasKey("CarrierReportId");
 
                     b.HasIndex("CarrierId");
 

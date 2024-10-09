@@ -12,18 +12,13 @@ namespace EntityLayer.Concrete
     {
 
         [Key]
-        public int ReportId { get; set; }
+        public int CarrierReportId { get; set; }
 
         public int CarrierId { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string ReportName { get; set; }
+        public decimal CarrierCost { get; set; }
 
-        public DateTime ReportDate { get; set; }
-
-        [MaxLength(500)]
-        public string ReportDetails { get; set; }
+        public DateTime CarrierReportDate { get; set; }
 
         // Carrier ile ilişki
         [JsonIgnore]

@@ -9,5 +9,7 @@ namespace BusinessLayer.Abstract
 {
     public interface ICarrierReportService : IGenericService<CarrierReport>
     {
+        Task TAddRangeAsync(List<CarrierReport> reports);
+        Task GenerateCarrierReport();
     }
 }

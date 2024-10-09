@@ -61,8 +61,8 @@ namespace BusinessLayer.Concrete
             if (foundMatchingConfiguration)
             {
                 // Siparişi oluştur
-                order.OrderCarrierCost = minCarrierCost; 
-                await _orderDal.CreateOrderAsync(order); 
+                order.OrderCarrierCost = minCarrierCost;
+                await _orderDal.CreateOrderAsync(order);
                 return order;
             }
 
@@ -95,11 +95,18 @@ namespace BusinessLayer.Concrete
             }
 
             // siparişi oluştur
-            order.OrderCarrierCost = carrierCost; 
-            order.CarrierId = carrierId; 
-            await _orderDal.CreateOrderAsync(order); 
+            order.OrderCarrierCost = carrierCost;
+            order.CarrierId = carrierId;
 
-            return order; // Oluşturulan siparişi döndür
+            // Model doğrulama 
+            if (order.OrderCarrierCost <= 0)
+            {
+                throw new Exception("Kargo ücreti geçersiz!");
+            }
+
+            await _orderDal.CreateOrderAsync(order);
+
+            return order; 
         }
 
 
