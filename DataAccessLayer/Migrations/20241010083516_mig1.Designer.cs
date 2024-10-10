@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241009181628_mig1")]
+    [Migration("20241010083516_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,8 +87,8 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarrierReportId"), 1L, 1);
 
-                    b.Property<int>("CarrierCost")
-                        .HasColumnType("int");
+                    b.Property<decimal>("CarrierCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("CarrierId")
                         .HasColumnType("int");

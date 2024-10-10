@@ -54,7 +54,7 @@ namespace DataAccessLayer.Migrations
                     CarrierReportId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarrierId = table.Column<int>(type: "int", nullable: false),
-                    CarrierCost = table.Column<int>(type: "int", nullable: false),
+                    CarrierCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CarrierReportDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

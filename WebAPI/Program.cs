@@ -9,19 +9,19 @@ using WebAPI.Mapping.AutoMapperProfile;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<Context>();
+builder.Services.AddScoped<ICarrierDal, EfCarrierDal>();
+builder.Services.AddScoped<IOrderDal, EfOrderDal>();
+builder.Services.AddScoped<ICarrierConfigurationDal, EfCarrierConfigurationDal>();
+builder.Services.AddScoped<ICarrierReportDal, EfCarrierReportDal>();
 
 builder.Services.AddScoped<IOrderService, OrderManager>();
 builder.Services.AddScoped<ICarrierService, CarrierManager>();
 builder.Services.AddScoped<ICarrierConfigurationService, CarrierConfigurationManager>();
-
-builder.Services.AddScoped<ICarrierDal, EfCarrierDal>();
-builder.Services.AddScoped<IOrderDal, EfOrderDal>();
-builder.Services.AddScoped<ICarrierConfigurationDal, EfCarrierConfigurationDal>();
+builder.Services.AddScoped<ICarrierReportService, CarrierReportManager>();
 
 builder.Services.AddHangfire(config =>
         config.UseSqlServerStorage("Server=DESKTOP-MDRTU7J\\SQLEXPRESS; Database=CargoSelectorDB; Integrated Security=True"));
 builder.Services.AddHangfireServer();
-
 
 builder.Services.AddControllers();
 
@@ -43,10 +43,10 @@ if (app.Environment.IsDevelopment())
 app.UseHangfireDashboard();
 app.UseHangfireServer();
 
-//RecurringJob.AddOrUpdate<ICarrierReportService>(
-//      "GenerateCarrierReportJob", // Job için benzersiz bir ad
-//      service => service.GenerateCarrierReport(), // Job'un çaðýracaðý metot
-//      Cron.Hourly);
+RecurringJob.AddOrUpdate<ICarrierReportService>(
+      "GenerateCarrierReportJob", // Job için benzersiz bir ad
+      service => service.GenerateCarrierReport(), // Job'un çaðýracaðý metot
+      Cron.Hourly);
 
 app.UseAuthorization();
 

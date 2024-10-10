@@ -20,9 +20,9 @@ namespace DataAccessLayer.EntityFramework
 
         public async Task<Order> CreateOrderAsync(Order order)
         {
-            await _context.Orders.AddAsync(order); // Asenkron olarak siparişi ekle
-            await _context.SaveChangesAsync(); // Değişiklikleri kaydet
-            return order; // Eklenen siparişi döndür
+            await _context.Orders.AddAsync(order); 
+            await _context.SaveChangesAsync(); 
+            return order; 
         }
     }
 }

@@ -9,7 +9,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface ICarrierReportDal: IGenericDal<CarrierReport>
     {
-        //Tetiklemede rapor ekleme için gerekli olan metot
+        //otomatik rapor ekleme için gerekli olan metot
         Task AddRangeAsync(List<CarrierReport> reports);
     }
 }

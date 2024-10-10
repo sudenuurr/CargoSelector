@@ -14,10 +14,10 @@ namespace BusinessLayer.Concrete
 {
     public class CarrierReportManager : ICarrierReportService
     {
-        private readonly EfCarrierReportDal _carrierReportDal;
+        private readonly ICarrierReportDal _carrierReportDal;
         private readonly Context _context;
 
-        public CarrierReportManager(EfCarrierReportDal carrierReportDal, Context context)
+        public CarrierReportManager(ICarrierReportDal carrierReportDal, Context context)
         {
             _carrierReportDal = carrierReportDal;
             _context = context;
@@ -48,20 +48,18 @@ namespace BusinessLayer.Concrete
             await _carrierReportDal.UpdateAsync(entity);
         }
 
-        public async Task TAddRangeAsync(List<CarrierReport> reports)
+        public async Task TAddRangeAsync()
         {
-            // Siparişleri kargo ve tarih bazında gruplama
             var reportData = await _context.Orders
                 .GroupBy(o => new { o.CarrierId, o.OrderDate.Date })
                 .Select(g => new
                 {
                     CarrierId = g.Key.CarrierId,
-                    ReportDate = g.Key.Date,
+                    ReportDate = DateTime.Now,
                     TotalCost = g.Sum(o => o.OrderCarrierCost)
                 })
                 .ToListAsync();
 
-            // Rapor verilerini CarrierReports tablosuna kaydetme
             var carrierReports = reportData.Select(r => new CarrierReport
             {
                 CarrierId = r.CarrierId,
@@ -73,7 +71,7 @@ namespace BusinessLayer.Concrete
         }
         public async Task GenerateCarrierReport()
         {
-            await TAddRangeAsync(new List<CarrierReport>());
+            await TAddRangeAsync();
         }
     }
 }

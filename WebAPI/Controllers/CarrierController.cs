@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> CarrierList()
         {
-            var values = await _carrierService.TGetAllAsync(); // Asenkron olarak kargo firmalarını al
+            var values = await _carrierService.TGetAllAsync(); 
             return Ok(values);
         }
 
@@ -35,41 +35,41 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> CreateCarrier(CreateCarrierDto createCarrierDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Model doğrulama hatası durumunda
+                return BadRequest(ModelState); 
 
             var carrier = _mapper.Map<Carrier>(createCarrierDto); // DTO'dan entity'ye dönüşüm
-            await _carrierService.TInsertAsync(carrier); // Asenkron olarak kargo firmasını ekle
+            await _carrierService.TInsertAsync(carrier); 
 
-            return Ok("Kargo başarıyla oluşturuldu.");
+            return Ok("Kargo firması başarıyla oluşturuldu.");
         }
 
-        // Kargo silme
+        // Kargo firması silme
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarrier(int id)
         {
-            var carrier = await _carrierService.TGetByIdAsync(id); // Asenkron olarak kargo firmasını bul
+            var carrier = await _carrierService.TGetByIdAsync(id);
             if (carrier == null)
-                return NotFound($"ID'si {id} olan kargo bulunamadı."); // Kargo yoksa hata mesajı döndür
+                return NotFound($"ID'si {id} olan kargo firması bulunamadı.");
 
-            await _carrierService.TDeleteAsync(id); // Asenkron olarak kargo firmasını sil
-            return Ok($"{id} ID'li kargo başarıyla silindi.");
+            await _carrierService.TDeleteAsync(id); 
+            return Ok($"{id} ID'li kargo firması başarıyla silindi.");
         }
 
-        // Kargo güncelleme
+        // Kargo firması güncelleme
         [HttpPut]
         public async Task<IActionResult> UpdateCarrier( UpdateCarrierDto updateCarrierDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Model doğrulama hatası durumunda
+                return BadRequest(ModelState);
 
-            var existingCarrier = await _carrierService.TGetByIdAsync(updateCarrierDto.CarrierId); // Asenkron olarak mevcut kargo firmasını bul
+            var existingCarrier = await _carrierService.TGetByIdAsync(updateCarrierDto.CarrierId);
             if (existingCarrier == null)
-                return NotFound($"ID'si {updateCarrierDto.CarrierId} olan kargo bulunamadı."); // Kargo yoksa hata mesajı döndür
+                return NotFound($"ID'si {updateCarrierDto.CarrierId} olan kargo firması bulunamadı."); 
 
-            var carrier = _mapper.Map(updateCarrierDto, existingCarrier); // DTO'dan mevcut entity'ye dönüşüm
-            await _carrierService.TUpdateAsync(carrier); // Asenkron olarak kargo firmasını güncelle
+            var carrier = _mapper.Map(updateCarrierDto, existingCarrier); // DTO'dan entity'ye dönüşüm
+            await _carrierService.TUpdateAsync(carrier); 
 
-            return Ok("Kargo başarıyla güncellendi.");
+            return Ok("Kargo firması başarıyla güncellendi.");
         }
     }
 }

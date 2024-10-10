@@ -85,8 +85,8 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarrierReportId"), 1L, 1);
 
-                    b.Property<int>("CarrierCost")
-                        .HasColumnType("int");
+                    b.Property<decimal>("CarrierCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("CarrierId")
                         .HasColumnType("int");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,6 +21,8 @@ namespace EntityLayer.Concrete
         [Range(0, double.MaxValue)]
         public decimal OrderCarrierCost { get; set; }
         public int CarrierId { get; set; }
+
+        [JsonIgnore]
         public Carrier Carrier { get; set; }
     }
 }

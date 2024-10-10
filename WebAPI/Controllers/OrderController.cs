@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
         {
             if (!ModelState.IsValid)
                 if (!ModelState.IsValid)
-                    return BadRequest(ModelState); // Hatalı model durumu
+                    return BadRequest(ModelState);
 
             // CreateOrderDto'dan Order nesnesi oluştur
             var order = new Order
@@ -48,9 +48,9 @@ namespace WebAPI.Controllers
             };
 
             // Siparişi oluştur
-            var createdOrder = await _orderService.TCreateOrderAsync(order); // Asenkron sipariş oluşturma
+            var createdOrder = await _orderService.TCreateOrderAsync(order); 
 
-            return Ok(new { Message = "Siparişiniz başarıyla eklendi.", Order = createdOrder }); // Oluşturulan siparişi döndür
+            return Ok(new { Message = "Siparişiniz başarıyla eklendi.", Order = createdOrder });
         }
 
 

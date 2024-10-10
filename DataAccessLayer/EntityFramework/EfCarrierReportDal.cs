@@ -18,7 +18,7 @@ namespace DataAccessLayer.EntityFramework
 
         public async Task AddRangeAsync(List<CarrierReport> reports)
         {
-            await _context.CarrierReports.AddRangeAsync(reports); 
+            await _context.CarrierReports.AddRangeAsync(reports);
             await _context.SaveChangesAsync();
         }
     }

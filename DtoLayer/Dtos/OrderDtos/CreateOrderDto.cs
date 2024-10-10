@@ -11,7 +11,6 @@ namespace DtoLayer.Dtos.OrderDtos
     {
         [Range(1, int.MaxValue)]
         public int OrderDesi { get; set; }  
-        public int CarrierId { get; set; }
 
     }
 }

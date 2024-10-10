@@ -24,7 +24,7 @@ namespace BusinessLayer.Concrete
 
         public async Task<Order> TCreateOrderAsync(Order order)
         {
-            int orderDesi = order.OrderDesi; // Sipariş desisi
+            int orderDesi = order.OrderDesi;
 
             // Tüm kargo konfigürasyonlarını ve kargo firmalarını al
             List<CarrierConfiguration> carrierConfigurations = await _carrierConfigurationDal.GetAllAsync();
@@ -51,22 +51,23 @@ namespace BusinessLayer.Concrete
                             if (configuration.CarrierCost < minCarrierCost)
                             {
                                 minCarrierCost = configuration.CarrierCost;
-                                selectedCarrierId = configuration.CarrierId;
+                                selectedCarrierId = carrier.CarrierId; // CarrierId'yi carrier üzerinden alıyoruz
                             }
                         }
                     }
                 }
             }
 
+            // Uygun bir yapı bulunduysa siparişi belirlenen kargo maliyeti ve ID ile kaydet
             if (foundMatchingConfiguration)
             {
-                // Siparişi oluştur
                 order.OrderCarrierCost = minCarrierCost;
+                order.CarrierId = selectedCarrierId; // Belirlenen CarrierId'yi siparişe ata
                 await _orderDal.CreateOrderAsync(order);
                 return order;
             }
 
-            // Uygun bir kargo firması bulunamadıysa en yakın kargo konfigürasyonunu bul
+            // Uygun bir kargo firması bulunmadıysa, en yakın kargo konfigürasyonunu bul
             decimal carrierCost = 0;
             int plusDesiCost = 0;
             int carrierId = 0;
@@ -74,14 +75,12 @@ namespace BusinessLayer.Concrete
 
             foreach (CarrierConfiguration configuration in carrierConfigurations)
             {
-                // En yakın desi değerini bul
                 decimal desiDifference = Math.Abs(orderDesi - configuration.CarrierMaxDesi);
 
                 if (desiDifference < closestDesiDifference)
                 {
                     closestDesiDifference = desiDifference;
 
-                    // İlgili kargo firmasıyla eşleştir
                     Carrier carrier = carriers.FirstOrDefault(c => c.CarrierId == configuration.CarrierId && c.CarrierIsActive);
                     if (carrier != null)
                     {
@@ -94,11 +93,10 @@ namespace BusinessLayer.Concrete
                 }
             }
 
-            // siparişi oluştur
+            // En yakın yapı üzerinden siparişi oluştur ve maliyeti ata
             order.OrderCarrierCost = carrierCost;
-            order.CarrierId = carrierId;
+            order.CarrierId = carrierId; // En uygun kargo firmasının CarrierId'sini ata
 
-            // Model doğrulama 
             if (order.OrderCarrierCost <= 0)
             {
                 throw new Exception("Kargo ücreti geçersiz!");
@@ -106,7 +104,7 @@ namespace BusinessLayer.Concrete
 
             await _orderDal.CreateOrderAsync(order);
 
-            return order; 
+            return order;
         }
 
 
